@@ -2,7 +2,7 @@
 
 ## EDS 214 Group Project
 
-![Credit: Luquillo LTER. CC BY-SA 4.0](luq-0004.jpg){width="470"}
+![Credit: Luquillo LTER. CC BY-SA 4.0](luq-0004.jpg)
 
 Meteorological station on East Peak road in the Elfin Forest of the Luquillo Mountains, Puerto Rico.
 
@@ -14,7 +14,7 @@ The goal of this project was to work as a team using an analytical workflow. In 
 
 ### Recreate a graph
 
-The first object of the project was to recreate a graph containing data on Potassium and Nitrogen between 1988 and 1994 for three sites within the Loquillo Experimental forest.
+The first object of the project was to recreate a graph containing data on Potassium and Nitrogen between 1988 and 1994 for three sites within the Loquillo Experimental Forest.
 
 ### Devising our own question
 
