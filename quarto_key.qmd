@@ -135,9 +135,6 @@ ggplot(monthly_stream_quality, aes(x = date,
 <<<<<<< HEAD
 Over time how to total sediment and carbon vary and is there a correlation between the two.
 
-=======
->>>>>>> 3ff34bafe05bf342a89af658ec743071c0bda99b
-<https://www.nature.com/articles/s41598-018-33640-3>
 
 https://link.springer.com/article/10.1007/s40996-020-00460-3
 
