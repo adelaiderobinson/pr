@@ -1,7 +1,10 @@
 ---
-title: "Quarto_Key"
+title: "Short Analysis of Lubridillo Site"
 format: html
 editor: visual
+execute:
+  warning: false
+  message: false
 ---
 
 # Loading Libraries
@@ -9,7 +12,7 @@ editor: visual
 ```{r}
 library(tidyverse)
 library(janitor)
-
+library(lubridate)
 ```
 
 # Documentation
@@ -24,46 +27,52 @@ Group:
 
 Andre - work on graph
 
-# 
-
-# Importing Data
+# Import, tidy, and join data
 
 ```{r}
 
-#all Quebrada
+# read all quebradas
 setwd("/courses/EDS214/pr/data/knb_lter_luq_raw")
-p_r_m <-read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>% clean_names()
-b_q_1 <- read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>% clean_names()  
-b_q_2 <- read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>% clean_names()
-b_q_3 <-  read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>% clean_names()
 
-#Full Join
+p_r_m <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
 
+b_q_1 <- read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+
+  
+b_q_2 <- read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+
+  
+b_q_3 <- read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+  
+# merge data via full join 
 stream_water_df <- p_r_m %>% 
   full_join(b_q_1) %>% 
   full_join(b_q_2) %>%
   full_join(b_q_3)
 
+# export the data frame
 setwd("/courses/EDS214/pr/data/processed_data")
 write_csv(stream_water_df, "stream_water.csv")
-```
-
-# Tidying Data
-
-```{r}
-
-```
-
-# Export Data
-
-```{r}
-
-```
-
-# Pulling in Merged Data
-
-```{r}
-
 ```
 
 # Recreate Graph (Step 1)
