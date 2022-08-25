@@ -2,7 +2,11 @@
 
 ## EDS 214 Group Project
 
-![Credit: Luquillo LTER. CC BY-SA 4.0](luq-0004.jpg)
+![](luq-0004.jpg)
+
+![](luq-0004.jpg){alt="Credit: Luquillo LTER. CC BY-SA 4.0"}
+
+Credit: Luquilo LTER. CC BY-SA 4.0
 
 Meteorological station on East Peak road in the Elfin Forest of the Luquillo Mountains, Puerto Rico.
 
