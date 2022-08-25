@@ -1,5 +1,7 @@
 ---
 title: "Team Pr"
+subtitle: "Alessandra, Adelaide, Andre, Guillermo"
+institute: "Bren School of Enviromental Management & Science"
 format:
   revealjs: 
     theme: sky
@@ -42,7 +44,7 @@ format:
 
     b\. Adelaide, Alessandra - Tidy data and analysis
 
-# Importing Data
+# Importing Data  {.small}
 
 ```{r}
 #| eval: false
@@ -61,21 +63,23 @@ library(janitor)
 
 #all Quebrada
 setwd("/courses/EDS214/pr/data/knb_lter_luq_raw")
-p_r_m <-read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>% clean_names()
-b_q_1 <- read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>% clean_names()  
-b_q_2 <- read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>% clean_names()
-b_q_3 <-  read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>% clean_names()
+p_r_m <-
+  read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>% clean_names()
+b_q_1 <-
+  read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>% clean_names()
+b_q_2 <-
+  read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>% clean_names()
+b_q_3 <-
+  read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>% clean_names()
 
 #Full Join
-
 stream_water_df <- p_r_m %>% 
   full_join(b_q_1) %>% 
   full_join(b_q_2) %>%
   full_join(b_q_3)
-
+# Export Merged Data
 setwd("/courses/EDS214/pr/data/processed_data")
 write_csv(stream_water_df, "stream_water.csv")
-
 ```
 
 # Results
@@ -83,12 +87,16 @@ write_csv(stream_water_df, "stream_water.csv")
 ## Tidy data - Recreate Graph
 
 ```{r}
+#| echo: true
+
 # place holder for code - tidy data and graph
 ```
 
 ## Graph
 
 ```{r}
+#| echo: true
+
 #place code again, hide code and only show output
 ```
 
@@ -99,10 +107,14 @@ correlation between the two.
 <https://www.nature.com/articles/s41598-018-33640-3>
 
 ```{r}
+#| echo: true
+
 # place holder for code - tidy data 
 ```
 
 ```{r}
+#| echo: true
+
 # place holder to show any graphs or figures
 ```
 

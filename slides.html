@@ -384,6 +384,8 @@
 
 <section id="title-slide" class="center">
   <h1 class="title">Team Pr</h1>
+  <p class="subtitle">Alessandra, Adelaide, Andre, Guillermo</p>
+  <p class="institute">Bren School of Enviromental Management &amp; Science</p>
 </section>
 
 <section id="goals" class="slide level2">
@@ -421,7 +423,7 @@
 <p>b. Adelaide, Alessandra - Tidy data and analysis</p></li>
 </ol>
 </section></section>
-<section id="importing-data" class="title-slide slide level1 center">
+<section id="importing-data" class="title-slide slide level1 small center">
 <h1>Importing Data</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Loading Libraries</span></span>
@@ -432,20 +434,23 @@
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#all Quebrada</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="fu">setwd</span>(<span class="st">"/courses/EDS214/pr/data/knb_lter_luq_raw"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>p_r_m <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"RioMameyesPuenteRoto.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
-<span id="cb2-4"><a href="#cb2-4"></a>b_q_1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca1-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()  </span>
-<span id="cb2-5"><a href="#cb2-5"></a>b_q_2 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca2-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
-<span id="cb2-6"><a href="#cb2-6"></a>b_q_3 <span class="ot">&lt;-</span>  <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca3-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
-<span id="cb2-7"><a href="#cb2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#Full Join</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a>stream_water_df <span class="ot">&lt;-</span> p_r_m <span class="sc">%&gt;%</span> </span>
-<span id="cb2-11"><a href="#cb2-11"></a>  <span class="fu">full_join</span>(b_q_1) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-12"><a href="#cb2-12"></a>  <span class="fu">full_join</span>(b_q_2) <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>  <span class="fu">full_join</span>(b_q_3)</span>
-<span id="cb2-14"><a href="#cb2-14"></a></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="fu">setwd</span>(<span class="st">"/courses/EDS214/pr/data/processed_data"</span>)</span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="fu">write_csv</span>(stream_water_df, <span class="st">"stream_water.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a>p_r_m <span class="ot">&lt;-</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="fu">read_csv</span>(<span class="st">"RioMameyesPuenteRoto.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
+<span id="cb2-5"><a href="#cb2-5"></a>b_q_1 <span class="ot">&lt;-</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca1-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
+<span id="cb2-7"><a href="#cb2-7"></a>b_q_2 <span class="ot">&lt;-</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>  <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca2-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
+<span id="cb2-9"><a href="#cb2-9"></a>b_q_3 <span class="ot">&lt;-</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>  <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca3-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#Full Join</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>stream_water_df <span class="ot">&lt;-</span> p_r_m <span class="sc">%&gt;%</span> </span>
+<span id="cb2-14"><a href="#cb2-14"></a>  <span class="fu">full_join</span>(b_q_1) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-15"><a href="#cb2-15"></a>  <span class="fu">full_join</span>(b_q_2) <span class="sc">%&gt;%</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>  <span class="fu">full_join</span>(b_q_3)</span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co"># Export Merged Data</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="fu">setwd</span>(<span class="st">"/courses/EDS214/pr/data/processed_data"</span>)</span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="fu">write_csv</span>(stream_water_df, <span class="st">"stream_water.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 
@@ -457,23 +462,23 @@
 <section id="tidy-data---recreate-graph" class="slide level2">
 <h2>Tidy data - Recreate Graph</h2>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># place holder for code - tidy data and graph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="graph" class="slide level2">
 <h2>Graph</h2>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#place code again, hide code and only show output</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="new-question" class="slide level2">
 <h2>New Question</h2>
 <p>Over time how to total sediment and carbon vary and is there a correlation between the two. <a href="https://www.nature.com/articles/s41598-018-33640-3" class="uri">https://www.nature.com/articles/s41598-018-33640-3</a></p>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># place holder for code - tidy data </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># place holder to show any graphs or figures</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
