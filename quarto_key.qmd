@@ -37,7 +37,7 @@ Andre - work on graph
 # read all quebradas
 setwd("/courses/EDS214/pr/data/knb_lter_luq_raw")
 
-p_r_m <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
+prm <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
   clean_names() %>%
   mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
   mutate(year = year(sample_date_ymd),
@@ -83,68 +83,60 @@ write_csv(stream_water_df, "stream_water.csv")
 ## WORK UNDER HERE
 
 ```{r}
-
-stream_water_clean <- stream_water_df %>%
-  select(sample_id, sample_date_ymd, year, month, day, k, no3_n) %>%
-  filter(year(sample_date_ymd) %in% 1989:1992)
-
-start_date <- ymd("1989-05-16")
-end_date <- ymd("1992-04-30")
-
-date <- interval(start_date, end_date)
-
-prm <- stream_water_clean %>%
-  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
-  filter(sample_id == "MPR" & year(sample_date_ymd) %in% 1989:1992) 
-
-bq_1 <- stream_water_clean %>%
-  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
-  filter(sample_id == "Q1" & year(sample_date_ymd) %in% 1989:1992) 
-
-bq_2 <- stream_water_clean %>%
-  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
-  filter(sample_id == "Q2" & year(sample_date_ymd) %in% 1989:1992) 
-
-bq_3 <- stream_water_clean %>%
-  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
-  filter(sample_id == "Q3" & year(sample_date_ymd) %in% 1989:1992) 
-
-unique(stream_water_clean$sample_id)
-
-```
-
-```{r}
-joined_data <- bind_rows(bq_1, bq_2, bq_3, prm)
-## select to keep rows: sample_id, sample_date, no3_n, k
-stream_quality <- joined_data %>%
-  select(sample_id, sample_date_ymd, no3_n, k) %>%
+stream_quality <- stream_water_df %>%
+   select(sample_id, sample_date_ymd, no3_n, k) %>%
   mutate(year = year(sample_date_ymd),
          date = ymd(paste0(year, "-", month(sample_date_ymd), "-1"))) %>%
   filter(year %in% 1988:1994)
-monthly_quality <- stream_quality %>%
+
+monthly_stream_quality <- stream_quality %>%
   group_by(sample_id, date) %>%
   summarize(monthlyno3 = mean(no3_n, na.rm = TRUE),
-            monthlyk = mean(k, na.rm = TRUE))
+            monthlyk = mean(k, na.rm = TRUE)) %>%
+  mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"))
 ```
-
 ```{r}
-ggplot(monthly_quality, aes(x = date,
+ggplot(monthly_stream_quality, aes(x = date,
                                y = monthlyk) )+
-         geom_line(aes(color = sample_id))
-
-
+         geom_line(aes(color = sample_id)) +
+  labs(title = "Potassium Levels by Watershed",
+       x = "Year",
+       y = "Potassium Levels (mg/L)") +
+  facet_wrap(~sample_id) +
+  theme_test() +
+  theme(legend.position = "none",
+        panel.grid.major = element_line(colour = "gray",
+                                        size = 0.10),
+        plot.title.position = "plot") 
+  
+ 
 ```
 
 ## WORK UNDER HERE ALSO
 
 ```{r}
-ggplot(monthly_quality, aes(x = date,
-                               y = no3_n)) +
-  geom_line(aes(color = sample_id))
+ggplot(monthly_stream_quality, aes(x = date,
+                               y = monthlyno3) )+
+         geom_line(aes(color = sample_id)) +
+  labs(title = "Nitrate Nitrogen Levels by Watershed",
+       x = "Year",
+       y = "Nitrate Nitrogen Levels (mg/L)") +
+  facet_wrap(~sample_id) +
+  theme_test() +
+  theme(legend.position = "none",
+        panel.grid.major = element_line(colour = "gray",
+                                        size = 0.10),
+        plot.title.position = "plot")
 ```
 
+<<<<<<< HEAD
 Over time how to total sediment and carbon vary and is there a correlation between the two.
 
+=======
+>>>>>>> 3ff34bafe05bf342a89af658ec743071c0bda99b
 <https://www.nature.com/articles/s41598-018-33640-3>
 
 https://link.springer.com/article/10.1007/s40996-020-00460-3
@@ -164,9 +156,14 @@ sediment_ph_df <- stream_water_df %>%
 
 sediment_ph_long <- sediment_ph_df %>%
   pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>%
-  group_by(sample_date_ymd, year, month, day, parameter, sample_id) %>% 
-  summarize(mean_parameter = mean(value, na.rm = TRUE))
-
+  group_by(year, parameter, sample_id) %>% 
+  summarize(mean_parameter = mean(value, na.rm = TRUE)) %>%
+  mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes"),
+         sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley"),
+         sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley"),
+         sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"),
+         parameter = str_replace(parameter, "p_h", "PH"),
+         parameter = str_replace(parameter, "tss", "Total Suspended Sediment (mg/L)"))
 ```
 
 ```{r}
@@ -176,5 +173,15 @@ ggplot(sediment_ph_long,
   geom_line(aes(color = sample_id)) +
   facet_wrap(~parameter,
              scales = "free",
-             ncol = 1)
+             ncol = 1) +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom") +
+  geom_vline(xintercept = 1989, 
+             linetype = "dashed") + 
+  geom_vline(xintercept = 2017, 
+             linetype = "dashed") + 
+  labs(title = "PH and total suspended sediment in stream water \nfrom the Luquillo Mountains",
+       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
+       x = "Year",
+       y = NULL)
 ```

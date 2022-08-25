@@ -121,7 +121,7 @@ We were interested in looking at the relationship between suspended sediment and
 
 ## Resources {.small}
 
-Our github repository:  
+Our github repository:\
 https://github.com/avidalmeza/pr
 
 Our data:
