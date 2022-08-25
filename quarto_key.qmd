@@ -68,7 +68,7 @@ bq_3 <- read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>%
          day = day(sample_date_ymd))
   
 # merge data via full join 
-stream_water_df <- p_r_m %>% 
+stream_water_df <- prm %>% 
  full_join(bq_1) %>% 
   full_join(bq_2) %>%
   full_join(bq_3)
@@ -80,7 +80,6 @@ write_csv(stream_water_df, "stream_water.csv")
 
 # Recreate Graph (Step 1)
 
-## WORK UNDER HERE
 
 ```{r}
 stream_quality <- stream_water_df %>%
