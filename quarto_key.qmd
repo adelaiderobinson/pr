@@ -89,22 +89,39 @@ write_csv(stream_water_df, "stream_water.csv")
 
 ```
 
-# New Question
-
-## WORK UNDER HERE ALE
+# Suspended sediment and temperature
 
 ```{r}
+sediment_temp_df <- stream_water_df %>%
+  select(-c(gage_ht, p_h, cond, cl, no3_n,
+            so4_s, na, k, mg, ca, nh4_n, po4_p,
+            tdn, tdp, si_o2, don, dic, doc,
+            chloride_code, nitrate_code, 
+            sulfate_code, sodium_code, 
+            potassium_code, magnesium_code, calcium_code,
+            nh4code, po4code, doc_code,
+            dic_code, tdn_code, si_o2code,
+            don_code)) %>%
+  mutate(tss = as.numeric(tss))
 
+sediment_temp_long <- sediment_temp_df %>%
+  pivot_longer(temp, tss, names_to = "parameter")
 ```
 
-## WORK UNDER HERE ADELAIDE
-
 ```{r}
-
+ggplot(sediment_temp_df) +
+  geom_line(aes(x = sample_date_ymd, 
+                y = temp),
+            color = "red") + 
+  geom_line(aes(x = sample_date_ymd,
+                y = tss),
+            color = "blue")
 ```
 
 Over time how to total sediment and carbon vary and is there a correlation between the two.
 
 <https://www.nature.com/articles/s41598-018-33640-3>
+
+https://link.springer.com/article/10.1007/s40996-020-00460-3
 
 # 
