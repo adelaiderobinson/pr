@@ -1,4 +1,4 @@
-# Team: PR 
+# Team: PR
 
 ## EDS 214 Group Project
 
@@ -28,7 +28,7 @@ The data used in this project is located on EDI and can be accessed here: <https
 
 ## Acknowledgements
 
-Collaborators: Andre Dextre, Allesandra Vidal Meza, Guillermo Romero, Adelaide Robinson
+Collaborators: Andre Dextre, Alessandra Vidal Meza, Guillermo Romero, Adelaide Robinson
 
 ## References
 
