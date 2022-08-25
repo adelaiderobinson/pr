@@ -143,14 +143,11 @@ ggplot(monthly_quality, aes(x = date,
   geom_line(aes(color = sample_id))
 ```
 
-
-Over time how to total sediment and carbon vary and is there a
-correlation between the two.
+Over time how to total sediment and carbon vary and is there a correlation between the two.
 
 <https://www.nature.com/articles/s41598-018-33640-3>
 
 https://link.springer.com/article/10.1007/s40996-020-00460-3
-
 
 ```{r}
 sediment_ph_df <- stream_water_df %>%
@@ -171,6 +168,7 @@ sediment_ph_long <- sediment_ph_df %>%
   summarize(mean_parameter = mean(value, na.rm = TRUE))
 
 ```
+
 ```{r}
 ggplot(sediment_ph_long,
        aes(x = year,

@@ -13,8 +13,7 @@ format:
 
 ![](https://brunj7.github.io/EDS-214-analytical-workflows/img/luq-ts-plot.png){fig-align="center"}
 
-2.  Over time how total sediment and carbon vary and is there a
-    correlation between the two.
+2.  Over time how total sediment and carbon vary and is there a correlation between the two.
 
 # Workflow
 
@@ -22,19 +21,17 @@ format:
 
 ![](Support%20process%20example.png){fig-align="center"}
 
-## Project setup:  {.smaller}
+## Project setup: {.smaller}
 
 1.  Created shared folder on Taylor server - Adelaide
 
-```{=html}
 <!-- -->
-```
+
 2.  Created github repository and shared with collaborators - Alessandra
 
 3.  Data saved to Taylor server and Merged
 
-4.  Markdown file created with divisions of work areas for each
-    collaborator
+4.  Markdown file created with divisions of work areas for each collaborator
 
 5.  Additionally each member created branches to work in
 
@@ -44,7 +41,7 @@ format:
 
     b\. Adelaide, Alessandra - Tidy data and analysis
 
-# Importing Data  {.small}
+# Importing Data {.small}
 
 ```{r}
 #| eval: false
@@ -102,9 +99,7 @@ write_csv(stream_water_df, "stream_water.csv")
 
 ## New Question
 
-Over time how to total sediment and carbon vary and is there a
-correlation between the two.
-<https://www.nature.com/articles/s41598-018-33640-3>
+We were interested in looking at the relationship between suspended sediment and temperature over time at the same three sites.
 
 ```{r}
 #| echo: true
@@ -124,10 +119,15 @@ correlation between the two.
 2.  tidy data?
 3.  extra
 
-## Resources
+## Resources {.small}
 
-github repository
+Our github repository:  
+https://github.com/avidalmeza/pr
 
-data source
+Our data:
 
-any other references needed
+## References
+
+McDowell, W. 2022. Chemistry of stream water from the Luquillo Mountains ver 4923058. Environmental Data Initiative. doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83
+
+Schaefer, D., McDowell, W., Scatena, F., & Asbury, C. (2000). Effects of hurricane disturbance on stream water concentrations and fluxes in eight tropical forest watersheds of the Luquillo Experimental Forest, Puerto Rico. Journal of Tropical Ecology, 16(2), 189-207. <doi:10.1017/S0266467400001358>
