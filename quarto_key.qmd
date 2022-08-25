@@ -11,8 +11,11 @@ execute:
 
 ```{r}
 library(tidyverse)
+library(here)
 library(janitor)
+library(ggExtra)
 library(lubridate)
+library(patchwork)
 ```
 
 # Documentation
@@ -41,7 +44,7 @@ p_r_m <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
          month = month(sample_date_ymd),
          day = day(sample_date_ymd))
 
-b_q_1 <- read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>%
+bq_1 <- read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>%
   clean_names() %>%
   mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
   mutate(year = year(sample_date_ymd),
@@ -49,7 +52,7 @@ b_q_1 <- read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>%
          day = day(sample_date_ymd))
 
   
-b_q_2 <- read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>%
+bq_2 <- read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>%
   clean_names() %>%
   mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
   mutate(year = year(sample_date_ymd),
@@ -57,7 +60,7 @@ b_q_2 <- read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>%
          day = day(sample_date_ymd))
 
   
-b_q_3 <- read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>%
+bq_3 <- read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>%
   clean_names() %>%
   mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
   mutate(year = year(sample_date_ymd),
@@ -66,9 +69,9 @@ b_q_3 <- read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>%
   
 # merge data via full join 
 stream_water_df <- p_r_m %>% 
-  full_join(b_q_1) %>% 
-  full_join(b_q_2) %>%
-  full_join(b_q_3)
+ full_join(bq_1) %>% 
+  full_join(bq_2) %>%
+  full_join(bq_3)
 
 # export the data frame
 setwd("/courses/EDS214/pr/data/processed_data")
@@ -81,12 +84,63 @@ write_csv(stream_water_df, "stream_water.csv")
 
 ```{r}
 
+stream_water_clean <- stream_water_df %>%
+  select(sample_id, sample_date_ymd, year, month, day, k, no3_n) %>%
+  filter(year(sample_date_ymd) %in% 1989:1992)
+
+start_date <- ymd("1989-05-16")
+end_date <- ymd("1992-04-30")
+
+date <- interval(start_date, end_date)
+
+prm <- stream_water_clean %>%
+  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
+  filter(sample_id == "MPR" & year(sample_date_ymd) %in% 1989:1992) 
+
+bq_1 <- stream_water_clean %>%
+  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
+  filter(sample_id == "Q1" & year(sample_date_ymd) %in% 1989:1992) 
+
+bq_2 <- stream_water_clean %>%
+  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
+  filter(sample_id == "Q2" & year(sample_date_ymd) %in% 1989:1992) 
+
+bq_3 <- stream_water_clean %>%
+  select(sample_id, sample_date_ymd, month, k, no3_n) %>%
+  filter(sample_id == "Q3" & year(sample_date_ymd) %in% 1989:1992) 
+
+unique(stream_water_clean$sample_id)
+
+```
+
+```{r}
+joined_data <- bind_rows(bq_1, bq_2, bq_3, prm)
+## select to keep rows: sample_id, sample_date, no3_n, k
+stream_quality <- joined_data %>%
+  select(sample_id, sample_date_ymd, no3_n, k) %>%
+  mutate(year = year(sample_date_ymd),
+         date = ymd(paste0(year, "-", month(sample_date_ymd), "-1"))) %>%
+  filter(year %in% 1988:1994)
+monthly_quality <- stream_quality %>%
+  group_by(sample_id, date) %>%
+  summarize(monthlyno3 = mean(no3_n, na.rm = TRUE),
+            monthlyk = mean(k, na.rm = TRUE))
+```
+
+```{r}
+ggplot(monthly_quality, aes(x = date,
+                               y = monthlyk) )+
+         geom_line(aes(color = sample_id))
+
+
 ```
 
 ## WORK UNDER HERE ALSO
 
 ```{r}
-
+ggplot(monthly_quality, aes(x = date,
+                               y = no3_n)) +
+  geom_line(aes(color = sample_id))
 ```
 
 # New Question
