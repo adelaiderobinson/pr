@@ -157,7 +157,8 @@ ggplot(monthly_quality, aes(x = date,
 
 ```
 
-Over time how to total sediment and carbon vary and is there a correlation between the two.
+Over time how to total sediment and carbon vary and is there a
+correlation between the two.
 
 <https://www.nature.com/articles/s41598-018-33640-3>
 
