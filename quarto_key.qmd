@@ -132,14 +132,9 @@ ggplot(monthly_stream_quality, aes(x = date,
         plot.title.position = "plot")
 ```
 
-
-Over time how to total sediment and carbon vary and is there a
-correlation between the two.
-
 <https://www.nature.com/articles/s41598-018-33640-3>
 
 https://link.springer.com/article/10.1007/s40996-020-00460-3
-
 
 ```{r}
 sediment_ph_df <- stream_water_df %>%
@@ -156,10 +151,16 @@ sediment_ph_df <- stream_water_df %>%
 
 sediment_ph_long <- sediment_ph_df %>%
   pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>%
-  group_by(sample_date_ymd, year, month, day, parameter, sample_id) %>% 
-  summarize(mean_parameter = mean(value, na.rm = TRUE))
-
+  group_by(year, parameter, sample_id) %>% 
+  summarize(mean_parameter = mean(value, na.rm = TRUE)) %>%
+  mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes"),
+         sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley"),
+         sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley"),
+         sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"),
+         parameter = str_replace(parameter, "p_h", "PH"),
+         parameter = str_replace(parameter, "tss", "Total Suspended Sediment (mg/L)"))
 ```
+
 ```{r}
 ggplot(sediment_ph_long,
        aes(x = year,
@@ -167,5 +168,15 @@ ggplot(sediment_ph_long,
   geom_line(aes(color = sample_id)) +
   facet_wrap(~parameter,
              scales = "free",
-             ncol = 1)
+             ncol = 1) +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom") +
+  geom_vline(xintercept = 1989, 
+             linetype = "dashed") + 
+  geom_vline(xintercept = 2017, 
+             linetype = "dashed") + 
+  labs(title = "PH and total suspended sediment in stream water \nfrom the Luquillo Mountains",
+       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
+       x = "Year",
+       y = NULL)
 ```
