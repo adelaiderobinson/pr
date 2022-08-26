@@ -24,7 +24,8 @@ library(patchwork)
 
 -   Created github repository and shared with collaborators-Alessandra
 
--   Created Quarto document with sections to work in separately- Group Effort
+-   Created Quarto document with sections to work in separately- Group
+    Effort
 
 -   Import and tidy data- Group Effort
 
@@ -137,7 +138,8 @@ ggplot(monthly_stream_quality, aes(x = date,
 
 # New Question
 
-Looking at the relationship between total suspended sediment and pH for the same three sites from 1989 to 2017.
+Looking at the relationship between total suspended sediment and pH for
+the same three sites from 1989 to 2017.
 
 ```{r}
 sediment_ph_df <- stream_water_df %>%
