@@ -472,37 +472,105 @@
 <h1>Results</h1>
 
 </section>
-<section id="recreate-graph" class="slide level2">
-<h2>Recreate Graph</h2>
+<section id="recreating-the-graph" class="slide level2">
+<h2>Recreating the Graph</h2>
+<div class="columns">
+<div class="column" style="width:65%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://brunj7.github.io/EDS-214-analytical-workflows/img/luq-ts-plot.png"></p>
+</figure>
+</div>
+</div><div class="column" style="width:35%;">
+<div class="cell">
+<details>
+<summary>Data Wrangling</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stream_quality <span class="ot">&lt;-</span> stream_water_df <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(sample_id, sample_date_ymd, no3_n, k) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">year</span>(sample_date_ymd),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">date =</span> <span class="fu">ymd</span>(<span class="fu">paste0</span>(year, <span class="st">"-"</span>, <span class="fu">month</span>(sample_date_ymd), <span class="st">"-1"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">1988</span><span class="sc">:</span><span class="dv">1994</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>monthly_stream_quality <span class="ot">&lt;-</span> stream_quality <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sample_id, date) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">monthlyno3 =</span> <span class="fu">mean</span>(no3_n, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">monthlyk =</span> <span class="fu">mean</span>(k, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"MPR"</span>, <span class="st">"Puente Roto Mameyes"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q1"</span>, <span class="st">"Quebrada 1 - Bisley"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q2"</span>, <span class="st">"Quebrada 2 - Bisley"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q3"</span>, <span class="st">"Quebrada 3 - Bisley"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="recreating-the-graph-1" class="title-slide slide level1 center">
+<h1>Recreating the Graph</h1>
 <div class="cell">
 
 </div>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
-<section id="recreate-graph-1" class="slide level2">
-<h2>Recreate Graph</h2>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
+<section id="recreating-the-graph-2" class="slide level2">
+<h2>Recreating the graph</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section></section>
-<section id="new-question" class="title-slide slide level1 center" data-auto-stretch="" data-center="">
-<h1>New Question</h1>
-<p>We were interested in looking at the relationshiop betweeen suspened sediment and pH over time at the same three sites.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
+<section id="new-question" class="slide level2">
+<h2>New Question</h2>
+<p>We were interested in looking at the relationship between suspended sediment and pH over time at the same three sites.</p>
+<aside class="notes">
+<p>Previous studies have linked hurricanes to negative ph anomalies which is thought to accelerate ocean acidification. Hurricanes also suspend sediment. Yet, greater sediment suspension is often linked to higher ph. We were interested at look at the conflicting yet simulations changes hurricanes have the potential to cause.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="cell">
-
+<details>
+<summary>Data Wrangling</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sediment_ph_df <span class="ot">&lt;-</span> stream_water_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(gage_ht, temp, cond, cl, no3_n,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            so4_s, na, k, mg, ca, nh4_n, po4_p,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            tdn, tdp, si_o2, don, dic, doc,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            chloride_code, nitrate_code, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            sulfate_code, sodium_code, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            potassium_code, magnesium_code, calcium_code,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            nh4code, po4code, doc_code,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            dic_code, tdn_code, si_o2code,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            don_code)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tss =</span> <span class="fu">as.numeric</span>(tss))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>sediment_ph_long <span class="ot">&lt;-</span> sediment_ph_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(p_h, tss), <span class="at">names_to =</span> <span class="st">"parameter"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, parameter, sample_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_parameter =</span> <span class="fu">mean</span>(value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"MPR"</span>, <span class="st">"Puente Roto Mameyes"</span>),</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q1"</span>, <span class="st">"Quebrada 1 - Bisley"</span>),</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q2"</span>, <span class="st">"Quebrada 2 - Bisley"</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q3"</span>, <span class="st">"Quebrada 3 - Bisley"</span>),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">parameter =</span> <span class="fu">str_replace</span>(parameter, <span class="st">"p_h"</span>, <span class="st">"PH"</span>),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">parameter =</span> <span class="fu">str_replace</span>(parameter, <span class="st">"tss"</span>, <span class="st">"Total Suspended Sediment (mg/L)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
-</section>
-
+</section></section>
 <section id="new-question-1" class="title-slide slide level1 center">
 <h1>New Question</h1>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
 
 <section>
 <section id="challenges" class="title-slide slide level1 center">
 <h1>Challenges</h1>
 <ol type="1">
-<li>Determining if we should use absolute paths</li>
-<li>tidy data?</li>
-<li>Over time how total sediment and carbon vary and is there a correlation between the two. Also attempted temperature.</li>
+<li>Data Wrangling</li>
+<li>Analysis</li>
 </ol>
 </section>
 <section id="resources" class="slide level2">

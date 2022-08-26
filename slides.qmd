@@ -28,7 +28,8 @@ format:
 
 3.  Data saved to Taylor server and Merged
 
-4.  Markdown file created with divisions of work areas for each collaborator
+4.  Markdown file created with divisions of work areas for each
+    collaborator
 
 5.  Additionally each member created branches to work in
 
@@ -152,7 +153,39 @@ write_csv(stream_water_df, "stream_water.csv")
 
 # Results
 
-## Recreate Graph
+## Recreating the Graph
+
+::: columns
+::: {.column width="65%"}
+![](https://brunj7.github.io/EDS-214-analytical-workflows/img/luq-ts-plot.png){fig-align="center"}
+:::
+
+::: {.column width="35%"}
+```{r}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| code-summary: "Data Wrangling"
+
+stream_quality <- stream_water_df %>%
+   select(sample_id, sample_date_ymd, no3_n, k) %>%
+  mutate(year = year(sample_date_ymd),
+         date = ymd(paste0(year, "-", month(sample_date_ymd), "-1"))) %>%
+  filter(year %in% 1988:1994)
+
+monthly_stream_quality <- stream_quality %>%
+  group_by(sample_id, date) %>%
+  summarize(monthlyno3 = mean(no3_n, na.rm = TRUE),
+            monthlyk = mean(k, na.rm = TRUE)) %>%
+  mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"))
+```
+:::
+:::
+
+# Recreating the Graph
 
 ```{r}
 stream_quality <- stream_water_df %>%
@@ -186,7 +219,7 @@ ggplot(monthly_stream_quality, aes(x = date,
 
 ```
 
-## Recreate Graph
+## Recreating the graph
 
 ```{r}
 
@@ -204,12 +237,17 @@ ggplot(monthly_stream_quality, aes(x = date,
 
 ```
 
-# New Question {auto-stretch="" center=""}
-We were interested in looking at the relationshiop betweeen suspened sediment
-and pH over time at the same three sites.
+## New Question
+
+We were interested in looking at the relationship between suspended
+sediment and pH over time at the same three sites.
+
 
 
 ```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Data Wrangling"
 sediment_ph_df <- stream_water_df %>%
   select(-c(gage_ht, temp, cond, cl, no3_n,
             so4_s, na, k, mg, ca, nh4_n, po4_p,
@@ -259,15 +297,12 @@ ggplot(sediment_ph_long,
 
 # Challenges
 
-1.  Determining if we should use absolute paths
-2.  tidy data?
-3.  Over time how total sediment and carbon vary and is there a
-    correlation between the two. Also attempted temperature.
+1.  Data Wrangling
+2.  Analysis
 
 ## Resources
 
-Our github repository: 
-<https://github.com/avidalmeza/pr>
+Our github repository: <https://github.com/avidalmeza/pr>
 
 Our data: The data used in this project is located on EDI and can be
 accessed here:
