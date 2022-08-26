@@ -16,6 +16,7 @@ library(janitor)
 library(ggExtra)
 library(lubridate)
 library(patchwork)
+library(RCurl)
 ```
 
 # Division of tasks
@@ -150,7 +151,8 @@ sediment_ph_df <- stream_water_df %>%
             nh4code, po4code, doc_code,
             dic_code, tdn_code, si_o2code,
             don_code)) %>%
-  mutate(tss = as.numeric(tss))
+  mutate(tss = as.numeric(tss)) %>%
+  mutate(yearc = as.character(year))
 
 sediment_ph_long <- sediment_ph_df %>%
   pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>%
@@ -182,4 +184,37 @@ ggplot(sediment_ph_long,
        caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "Year",
        y = NULL)
+```
+
+```{r}
+# Linear regression with time and entity fixed effects
+sediment_ph_lm <- lm (p_h ~ tss + yearc + sample_id, sediment_ph_df)
+summary(sediment_ph_lm, robust = T)
+```
+
+```{r}
+# create subsets of summary_ph_df data
+stream_water_df_1988 <- subset(sediment_ph_df, year == 1988)
+stream_water_df_1989 <- subset(sediment_ph_df, year == 1989)
+stream_water_df_1990 <- subset(sediment_ph_df, year == 1990)
+```
+
+```{r}
+# Linear regression for 1988
+sediment_ph_1988_lm <- lm (p_h ~ tss + sample_id, stream_water_df_1988)
+summary(sediment_ph_1988_lm, robust = T)
+
+# Linear regression for 1989
+sediment_ph_1989_lm <- lm (p_h ~ tss + sample_id, stream_water_df_1989)
+summary(sediment_ph_1989_lm, robust = T)
+
+# First difference
+f_diff_1989_88 <- lm(I(stream_water_df_1989$p_h - stream_water_df_1988$p_h)~I(stream_water_df_1989$tss - stream_water_df_1988$tss))
+
+summary(f_diff_1989_88)
+
+f_diff_1990_88 <- lm(I(stream_water_df_1990$p_h - stream_water_df_1988$p_h)~I(stream_water_df_1990$tss - stream_water_df_1988$tss))
+
+summary(f_diff_1990_88)
+
 ```
