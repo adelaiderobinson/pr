@@ -153,8 +153,7 @@ sediment_ph_df <- stream_water_df %>%
             nh4code, po4code, doc_code,
             dic_code, tdn_code, si_o2code,
             don_code)) %>% # selecting relevant columns
-  mutate(tss = as.numeric(tss)) %>% # changing tss to numeric
-  mutate(yearc = as.character(year)) #changing to character for linear regression fixed effects 
+  mutate(tss = as.numeric(tss)) # changing tss to numeric
 
 sediment_ph_long <- sediment_ph_df %>%
   pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>% #combining p_h and tss into one column
