@@ -427,7 +427,8 @@
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggExtra)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RCurl)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -519,19 +520,6 @@
 <section id="new-question" class="slide level2">
 <h2>New Question</h2>
 <p>We were interested in looking at the relationship between suspended sediment and pH over time at the same three sites.</p>
-<aside class="notes">
-<p>Previous studies have linked hurricanes to negative ph anomalies which is thought to accelerate ocean acidification. Hurricanes also suspend sediment. Yet, greater sediment suspension is often linked to higher ph. We were interested at look at the conflicting yet simulations changes hurricanes have the potential to cause.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 <div class="cell">
 <details>
 <summary>Data Wrangling</summary>
@@ -544,19 +532,19 @@
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            potassium_code, magnesium_code, calcium_code,</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            nh4code, po4code, doc_code,</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            dic_code, tdn_code, si_o2code,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            don_code)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tss =</span> <span class="fu">as.numeric</span>(tss))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            don_code)) <span class="sc">%&gt;%</span> <span class="co"># selecting relevant columns</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tss =</span> <span class="fu">as.numeric</span>(tss)) <span class="co"># changing tss to numeric</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>sediment_ph_long <span class="ot">&lt;-</span> sediment_ph_df <span class="sc">%&gt;%</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(p_h, tss), <span class="at">names_to =</span> <span class="st">"parameter"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(p_h, tss), <span class="at">names_to =</span> <span class="st">"parameter"</span>) <span class="sc">%&gt;%</span> <span class="co">#combining p_h and tss into one column</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, parameter, sample_id) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_parameter =</span> <span class="fu">mean</span>(value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_parameter =</span> <span class="fu">mean</span>(value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> <span class="co"># find mean of tss and ph by year</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"MPR"</span>, <span class="st">"Puente Roto Mameyes"</span>),</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q1"</span>, <span class="st">"Quebrada 1 - Bisley"</span>),</span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q2"</span>, <span class="st">"Quebrada 2 - Bisley"</span>),</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">sample_id =</span> <span class="fu">str_replace</span>(sample_id, <span class="st">"Q3"</span>, <span class="st">"Quebrada 3 - Bisley"</span>),</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">parameter =</span> <span class="fu">str_replace</span>(parameter, <span class="st">"p_h"</span>, <span class="st">"PH"</span>),</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">parameter =</span> <span class="fu">str_replace</span>(parameter, <span class="st">"tss"</span>, <span class="st">"Total Suspended Sediment (mg/L)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">parameter =</span> <span class="fu">str_replace</span>(parameter, <span class="st">"tss"</span>, <span class="st">"Total Suspended Sediment (mg/L)"</span>)) <span class="co"># relabeling sites and parameters</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section></section>
@@ -564,6 +552,11 @@
 <h1>New Question</h1>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+
+<section id="linear-model" class="title-slide slide level1 center">
+<h1>Linear Model</h1>
+
+<img data-src="plot_lm.png" class="r-stretch quarto-figure-center"></section>
 
 <section>
 <section id="challenges" class="title-slide slide level1 center">
@@ -580,8 +573,10 @@
 </section>
 <section id="references" class="slide level2">
 <h2>References</h2>
+<p>Baugh, K. The Effect of Hurricanes on the Monthly Anomalies of pH and Dissolved Inorganic Carbon at the Bermuda Atlantic Time-series Study site. Office of Citizen Scholar Development: Undergraduate Research. <a href="https://undergraduateresearch.virginia.edu/effect-hurricanes-monthly-anomalies-ph-and-dissolved-inorganic-carbon-bermuda-atlantic-time-series-0" class="uri">https://undergraduateresearch.virginia.edu/effect-hurricanes-monthly-anomalies-ph-and-dissolved-inorganic-carbon-bermuda-atlantic-time-series-0</a></p>
 <p>McDowell, W. 2022. Chemistry of stream water from the Luquillo Mountains ver 4923058. Environmental Data Initiative. <a href="https://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83" class="uri">https://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83</a></p>
-<p>Schaefer, D., McDowell, W., Scatena, F., &amp; Asbury, C. (2000). Effects of hurricane disturbance on stream water concentrations and fluxes in eight tropical forest watersheds of the Luquillo Experimental Forest, Puerto Rico. Journal of Tropical Ecology, 16(2), 189-207. <a href="doi:10.1017/S0266467400001358" class="uri">doi:10.1017/S0266467400001358</a></p>
+<p>Schaefer, D., McDowell, W., Scatena, F., &amp; Asbury, C. (2000). Effects of hurricane disturbance on stream water concentrations and fluxes in eight tropical forest watersheds of the Luquillo Experimental Forest, Puerto Rico. Journal of Tropical Ecology, 16(2), 189-207. &lt;doi.org/10.1017/S0266467400001358&gt;</p>
+<p>Sha Lou, Wenrui Huang, Shuguang Liu, Guihui Zhong, Elijah Johnson, Hurricane impacts on turbidity and sediment in the Rookery Bay National Estuarine Research Reserve, Florida, USA,International Journal of Sediment Research,Volume 31, Issue 4, 2016,ISSN 1001-6279. &lt;doi.org/10.1016/j.ijsrc.2016.06.006&gt;.</p>
 <div class="footer footer-default">
 
 </div>
