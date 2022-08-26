@@ -107,6 +107,7 @@ ggplot(monthly_stream_quality, aes(x = date,
                                y = monthlyk) )+
          geom_line(aes(color = sample_id)) +
   labs(title = "Potassium Levels by Watershed",
+       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "Year",
        y = "Potassium Levels (mg/L)") +
   facet_wrap(~sample_id) + #facet by different watersheds
