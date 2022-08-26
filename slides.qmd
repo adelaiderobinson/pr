@@ -49,15 +49,14 @@ format:
 #| code-fold: true
 #| code-summary: "Libraries"
 
-
 library(tidyverse)
 library(here)
 library(janitor)
 library(ggExtra)
 library(lubridate)
 library(patchwork)
-library(gridExtra)
-
+library(RCurl)
+library(ggpubr)
 ```
 
 ```{r}
@@ -105,7 +104,8 @@ library(janitor)
 library(ggExtra)
 library(lubridate)
 library(patchwork)
-library(gridExtra)
+library(RCurl)
+library(ggpubr)
 ```
 
 ```{r}
@@ -206,16 +206,18 @@ monthly_stream_quality <- stream_quality %>%
 
 ```{r}
 ggplot(monthly_stream_quality, aes(x = date,
-                               y = monthlyk) )+
+                               y = monthlyno3) )+
          geom_line(aes(color = sample_id)) +
-  labs(title = "Potassium Levels by Watershed",
+  labs(title = "Nitrate Nitrogen Levels by Watershed",
+       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "Year",
-       y = "Potassium Levels (mg/L)") +
+       y = "Nitrate Nitrogen Levels (mg/L)") +
   facet_wrap(~sample_id) +
   theme_test() +
   theme(legend.position = "none",
         panel.grid.major = element_line(colour = "gray",
-                                        size = 0.10)) 
+                                        size = 0.10),
+        plot.title.position = "plot") 
 
 ```
 
@@ -242,8 +244,6 @@ ggplot(monthly_stream_quality, aes(x = date,
 We were interested in looking at the relationship between suspended
 sediment and pH over time at the same three sites.
 
-
-
 ```{r}
 #| echo: true
 #| code-fold: true
@@ -257,19 +257,19 @@ sediment_ph_df <- stream_water_df %>%
             potassium_code, magnesium_code, calcium_code,
             nh4code, po4code, doc_code,
             dic_code, tdn_code, si_o2code,
-            don_code)) %>%
-  mutate(tss = as.numeric(tss))
+            don_code)) %>% # selecting relevant columns
+  mutate(tss = as.numeric(tss)) # changing tss to numeric
 
 sediment_ph_long <- sediment_ph_df %>%
-  pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>%
+  pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>% #combining p_h and tss into one column
   group_by(year, parameter, sample_id) %>% 
-  summarize(mean_parameter = mean(value, na.rm = TRUE)) %>%
+  summarize(mean_parameter = mean(value, na.rm = TRUE)) %>% # find mean of tss and ph by year
   mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes"),
          sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley"),
          sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley"),
          sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"),
          parameter = str_replace(parameter, "p_h", "PH"),
-         parameter = str_replace(parameter, "tss", "Total Suspended Sediment (mg/L)"))
+         parameter = str_replace(parameter, "tss", "Total Suspended Sediment (mg/L)")) # relabeling sites and parameters
 ```
 
 # New Question
@@ -279,21 +279,25 @@ sediment_ph_long <- sediment_ph_df %>%
 ggplot(sediment_ph_long,
        aes(x = year,
            y = mean_parameter)) +
-  geom_line(aes(color = sample_id)) +
+  geom_line(aes(color = sample_id)) + #split each site into a line
   facet_wrap(~parameter,
              scales = "free",
-             ncol = 1) +
+             ncol = 1) + #split graphs by paramater
   theme(legend.title = element_blank(),
         legend.position = "bottom") +
   geom_vline(xintercept = 1989, 
              linetype = "dashed") + 
   geom_vline(xintercept = 2017, 
-             linetype = "dashed") + 
+             linetype = "dashed") +  #adding vertical lines to indicate hurricanes
   labs(title = "PH and total suspended sediment in stream water \nfrom the Luquillo Mountains",
        caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "Year",
        y = NULL)
 ```
+
+# Linear Model
+
+![](plot_lm.png){fig-align="center"}
 
 # Challenges
 
