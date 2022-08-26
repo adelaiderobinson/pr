@@ -210,7 +210,7 @@ summary(sediment_ph_1990_lm, robust = T)
 ```
 
 ```{r}
-ggplot(stream_water_df_1988,
+plot_1988 <- ggplot(stream_water_df_1988,
        aes(x = p_h,
            y = tss)) + 
   geom_point(color = "#32965D",
@@ -219,14 +219,13 @@ ggplot(stream_water_df_1988,
   stat_smooth(method = "lm", col = "#68A357") +
   theme_light() +
   labs(title = "Linear regression of PH and total suspended sediment \nfrom the Luquillo Mountains in 1988",
-       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "PH",
        y = "Total Suspended Sediment (mg/L)") +
     stat_cor(method = "pearson")
 ```
 
 ```{r}
-ggplot(stream_water_df_1990,
+plot_1990 <- ggplot(stream_water_df_1990,
        aes(x = p_h,
            y = tss)) + 
   geom_point(color = "#32965D",
@@ -235,8 +234,13 @@ ggplot(stream_water_df_1990,
   stat_smooth(method = "lm", col = "#68A357") +
   theme_light() +
   labs(title = "Linear regression of PH and total suspended sediment \nfrom the Luquillo Mountains in 1990",
-       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "PH",
        y = "Total Suspended Sediment (mg/L)") +
   stat_cor(method = "pearson")
+```
+
+```{r}
+# Use patchwork to plot both regressions side by side
+plot_1988 + plot_1990
+ggsave("plot_lm.png")
 ```
