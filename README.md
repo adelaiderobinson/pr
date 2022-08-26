@@ -32,7 +32,7 @@ Collaborators: Andre Dextre, Alessandra Vidal Meza, Guillermo Romero, Adelaide R
 
 ## References
 
-Baugh Kira The Effect of Hurricanes on the Monthly Anomalies of pH and Dissolved Inorganic Carbon at the Bermuda Atlantic Time-series Study site. Office of Citizen Scholar Development: Undergraduate Research. https://undergraduateresearch.virginia.edu/effect-hurricanes-monthly-anomalies-ph-and-dissolved-inorganic-carbon-bermuda-atlantic-time-series-0
+Baugh, K. The Effect of Hurricanes on the Monthly Anomalies of pH and Dissolved Inorganic Carbon at the Bermuda Atlantic Time-series Study site. Office of Citizen Scholar Development: Undergraduate Research. https://undergraduateresearch.virginia.edu/effect-hurricanes-monthly-anomalies-ph-and-dissolved-inorganic-carbon-bermuda-atlantic-time-series-0
 
 McDowell, W. 2022. Chemistry of stream water from the Luquillo Mountains ver 4923058. Environmental Data Initiative. doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83
 
