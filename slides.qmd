@@ -1,33 +1,30 @@
 ---
-title: "Team Pr"
-subtitle: "Alessandra, Adelaide, Andre, Guillermo"
+title: "Short Analysis of Lubridillo Site"
+subtitle: "Team PR - Alessandra, Adelaide, Andre, Guillermo"
 institute: "Bren School of Enviromental Management & Science"
+date: "August 26th, 2022"
+code-line-numbers: false
+code-overflow: wrap
+preview-links: auto
 format:
   revealjs: 
     theme: sky
 ---
 
-## Goals
+# Goals
 
 1.  Recreate Graph
 
 ![](https://brunj7.github.io/EDS-214-analytical-workflows/img/luq-ts-plot.png){fig-align="center"}
 
-2.  Over time how total sediment and carbon vary and is there a correlation between the two.
+2.  We were interested in looking at the relationship between suspended
+    sediment and pH over time at the same three sites.
 
-# Workflow
-
-## Diagram maybe
-
-![](Support%20process%20example.png){fig-align="center"}
-
-## Project setup: {.smaller}
+# Project Setup
 
 1.  Created shared folder on Taylor server - Adelaide
 
-<!-- -->
-
-2.  Created github repository and shared with collaborators - Alessandra
+2.  Created github repository and shared with collaborators -Alessandra
 
 3.  Data saved to Taylor server and Merged
 
@@ -37,97 +34,253 @@ format:
 
 6.  Division of graphs
 
-    a\. Andre, Guillermo - Tidy data and recreate graph
+# Workflow
 
-    b\. Adelaide, Alessandra - Tidy data and analysis
+::: columns
+::: {.column width="65%"}
+![](project_workflow.png)
+:::
 
-# Importing Data {.small}
-
+::: {.column width="35%"}
 ```{r}
 #| eval: false
 #| echo: true
+#| code-fold: true
+#| code-summary: "Libraries"
 
-# Loading Libraries
 
 library(tidyverse)
+library(here)
 library(janitor)
+library(ggExtra)
+library(lubridate)
+library(patchwork)
+library(gridExtra)
+
 ```
 
 ```{r}
 #| eval: false
-#| message: false
 #| echo: true
+#| code-fold: true
+#| code-summary: "Tidy Data"
 
-#all Quebrada
+
+
+# read in data for four sites
+prm <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+```
+
+```{r}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| code-summary: "Export Merged Data"
+
+
+# merge data via full join 
+stream_water_df <- prm %>% 
+ full_join(bq_1) %>% 
+  full_join(bq_2) %>%
+  full_join(bq_3)
+
+# export the data frame
+setwd("/courses/EDS214/pr/data/processed_data")
+write_csv(stream_water_df,
+          "stream_water.csv")
+```
+:::
+:::
+
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggExtra)
+library(lubridate)
+library(patchwork)
+library(gridExtra)
+```
+
+```{r}
+# read in data for four sites
 setwd("/courses/EDS214/pr/data/knb_lter_luq_raw")
-p_r_m <-
-  read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>% clean_names()
-b_q_1 <-
-  read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>% clean_names()
-b_q_2 <-
-  read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>% clean_names()
-b_q_3 <-
-  read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>% clean_names()
 
-#Full Join
-stream_water_df <- p_r_m %>% 
-  full_join(b_q_1) %>% 
-  full_join(b_q_2) %>%
-  full_join(b_q_3)
-# Export Merged Data
+prm <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+
+bq_1 <- read_csv("QuebradaCuenca1-Bisley.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+
+bq_2 <- read_csv("QuebradaCuenca2-Bisley.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+
+bq_3 <- read_csv("QuebradaCuenca3-Bisley.csv", na = c("NA")) %>%
+  clean_names() %>%
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
+  mutate(year = year(sample_date_ymd),
+         month = month(sample_date_ymd),
+         day = day(sample_date_ymd))
+  
+# merge data via full join 
+stream_water_df <- prm %>% 
+ full_join(bq_1) %>% 
+  full_join(bq_2) %>%
+  full_join(bq_3)
+
+# export the data frame
 setwd("/courses/EDS214/pr/data/processed_data")
 write_csv(stream_water_df, "stream_water.csv")
 ```
 
 # Results
 
-## Tidy data - Recreate Graph
+## Recreate Graph
 
 ```{r}
-#| echo: true
+stream_quality <- stream_water_df %>%
+   select(sample_id, sample_date_ymd, no3_n, k) %>%
+  mutate(year = year(sample_date_ymd),
+         date = ymd(paste0(year, "-", month(sample_date_ymd), "-1"))) %>%
+  filter(year %in% 1988:1994)
 
-# place holder for code - tidy data and graph
-```
-
-## Graph
-
-```{r}
-#| echo: true
-
-#place code again, hide code and only show output
-```
-
-## New Question
-
-We were interested in looking at the relationship between suspended sediment and temperature over time at the same three sites.
-
-```{r}
-#| echo: true
-
-# place holder for code - tidy data 
+monthly_stream_quality <- stream_quality %>%
+  group_by(sample_id, date) %>%
+  summarize(monthlyno3 = mean(no3_n, na.rm = TRUE),
+            monthlyk = mean(k, na.rm = TRUE)) %>%
+  mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley")) %>%
+  mutate(sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"))
 ```
 
 ```{r}
-#| echo: true
+ggplot(monthly_stream_quality, aes(x = date,
+                               y = monthlyk) )+
+         geom_line(aes(color = sample_id)) +
+  labs(title = "Potassium Levels by Watershed",
+       x = "Year",
+       y = "Potassium Levels (mg/L)") +
+  facet_wrap(~sample_id) +
+  theme_test() +
+  theme(legend.position = "none",
+        panel.grid.major = element_line(colour = "gray",
+                                        size = 0.10)) 
 
-# place holder to show any graphs or figures
+```
+
+## Recreate Graph
+
+```{r}
+
+ggplot(monthly_stream_quality, aes(x = date,
+                               y = monthlyno3) )+
+         geom_line(aes(color = sample_id)) +
+  labs(title = "Nitrate Nitrogen Levels by Watershed",
+       x = "Year",
+       y = "Nitrate Nitrogen Levels (mg/L)") +
+  facet_wrap(~sample_id) +
+  theme_test() +
+  theme(legend.position = "none",
+        panel.grid.major = element_line(colour = "gray",
+                                        size = 0.10))
+
+```
+
+# New Question {auto-stretch="" center=""}
+We were interested in looking at the relationshiop betweeen suspened sediment
+and pH over time at the same three sites.
+
+
+```{r}
+sediment_ph_df <- stream_water_df %>%
+  select(-c(gage_ht, temp, cond, cl, no3_n,
+            so4_s, na, k, mg, ca, nh4_n, po4_p,
+            tdn, tdp, si_o2, don, dic, doc,
+            chloride_code, nitrate_code, 
+            sulfate_code, sodium_code, 
+            potassium_code, magnesium_code, calcium_code,
+            nh4code, po4code, doc_code,
+            dic_code, tdn_code, si_o2code,
+            don_code)) %>%
+  mutate(tss = as.numeric(tss))
+
+sediment_ph_long <- sediment_ph_df %>%
+  pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>%
+  group_by(year, parameter, sample_id) %>% 
+  summarize(mean_parameter = mean(value, na.rm = TRUE)) %>%
+  mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes"),
+         sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley"),
+         sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley"),
+         sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"),
+         parameter = str_replace(parameter, "p_h", "PH"),
+         parameter = str_replace(parameter, "tss", "Total Suspended Sediment (mg/L)"))
+```
+
+# New Question
+
+```{r}
+
+ggplot(sediment_ph_long,
+       aes(x = year,
+           y = mean_parameter)) +
+  geom_line(aes(color = sample_id)) +
+  facet_wrap(~parameter,
+             scales = "free",
+             ncol = 1) +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom") +
+  geom_vline(xintercept = 1989, 
+             linetype = "dashed") + 
+  geom_vline(xintercept = 2017, 
+             linetype = "dashed") + 
+  labs(title = "PH and total suspended sediment in stream water \nfrom the Luquillo Mountains",
+       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
+       x = "Year",
+       y = NULL)
 ```
 
 # Challenges
 
 1.  Determining if we should use absolute paths
 2.  tidy data?
-3.  extra
+3.  Over time how total sediment and carbon vary and is there a
+    correlation between the two. Also attempted temperature.
 
-## Resources {.small}
+## Resources
 
-Our github repository:\
-https://github.com/avidalmeza/pr
+Our github repository: 
+<https://github.com/avidalmeza/pr>
 
-Our data:
+Our data: The data used in this project is located on EDI and can be
+accessed here:
+<https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-luq.20.4923058>
 
 ## References
 
-McDowell, W. 2022. Chemistry of stream water from the Luquillo Mountains ver 4923058. Environmental Data Initiative. doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83
+McDowell, W. 2022. Chemistry of stream water from the Luquillo Mountains
+ver 4923058. Environmental Data Initiative.
+<https://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83>
 
-Schaefer, D., McDowell, W., Scatena, F., & Asbury, C. (2000). Effects of hurricane disturbance on stream water concentrations and fluxes in eight tropical forest watersheds of the Luquillo Experimental Forest, Puerto Rico. Journal of Tropical Ecology, 16(2), 189-207. <doi:10.1017/S0266467400001358>
+Schaefer, D., McDowell, W., Scatena, F., & Asbury, C. (2000). Effects of
+hurricane disturbance on stream water concentrations and fluxes in eight
+tropical forest watersheds of the Luquillo Experimental Forest, Puerto
+Rico. Journal of Tropical Ecology, 16(2), 189-207.
+<doi:10.1017/S0266467400001358>

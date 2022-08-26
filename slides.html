@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="quarto-0.9.256">
 
-  <title>Team Pr</title>
+  <title>Short Analysis of Lubridillo Site</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -383,74 +383,87 @@
     <div class="slides">
 
 <section id="title-slide" class="center">
-  <h1 class="title">Team Pr</h1>
-  <p class="subtitle">Alessandra, Adelaide, Andre, Guillermo</p>
+  <h1 class="title">Short Analysis of Lubridillo Site</h1>
+  <p class="subtitle">Team PR - Alessandra, Adelaide, Andre, Guillermo</p>
   <p class="institute">Bren School of Enviromental Management &amp; Science</p>
+  <p class="date">August 26th, 2022</p>
 </section>
 
-<section id="goals" class="slide level2">
-<h2>Goals</h2>
+<section id="goals" class="title-slide slide level1 center">
+<h1>Goals</h1>
 <ol type="1">
 <li>Recreate Graph</li>
 </ol>
 
 <img data-src="https://brunj7.github.io/EDS-214-analytical-workflows/img/luq-ts-plot.png" class="r-stretch quarto-figure-center"><ol start="2" type="1">
-<li>Over time how total sediment and carbon vary and is there a correlation between the two.</li>
+<li>We were interested in looking at the relationship between suspended sediment and pH over time at the same three sites.</li>
 </ol>
 </section>
-<section>
-<section id="workflow" class="title-slide slide level1 center">
-<h1>Workflow</h1>
 
-</section>
-<section id="diagram-maybe" class="slide level2">
-<h2>Diagram maybe</h2>
-
-<img data-src="Support%20process%20example.png" class="r-stretch quarto-figure-center"></section>
-<section id="project-setup" class="slide level2 smaller">
-<h2>Project setup:</h2>
+<section id="project-setup" class="title-slide slide level1 center">
+<h1>Project Setup</h1>
 <ol type="1">
-<li>Created shared folder on Taylor server - Adelaide</li>
-</ol>
-<!-- -->
-<ol start="2" type="1">
-<li><p>Created github repository and shared with collaborators - Alessandra</p></li>
+<li><p>Created shared folder on Taylor server - Adelaide</p></li>
+<li><p>Created github repository and shared with collaborators -Alessandra</p></li>
 <li><p>Data saved to Taylor server and Merged</p></li>
 <li><p>Markdown file created with divisions of work areas for each collaborator</p></li>
 <li><p>Additionally each member created branches to work in</p></li>
-<li><p>Division of graphs</p>
-<p>a. Andre, Guillermo - Tidy data and recreate graph</p>
-<p>b. Adelaide, Alessandra - Tidy data and analysis</p></li>
+<li><p>Division of graphs</p></li>
 </ol>
-</section></section>
-<section id="importing-data" class="title-slide slide level1 small center">
-<h1>Importing Data</h1>
+</section>
+
+<section id="workflow" class="title-slide slide level1 center">
+<h1>Workflow</h1>
+<div class="columns">
+<div class="column" style="width:65%;">
+<p><img data-src="project_workflow.png"></p>
+</div><div class="column" style="width:35%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Loading Libraries</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Libraries</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggExtra)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#all Quebrada</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">setwd</span>(<span class="st">"/courses/EDS214/pr/data/knb_lter_luq_raw"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>p_r_m <span class="ot">&lt;-</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="fu">read_csv</span>(<span class="st">"RioMameyesPuenteRoto.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
-<span id="cb2-5"><a href="#cb2-5"></a>b_q_1 <span class="ot">&lt;-</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>  <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca1-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
-<span id="cb2-7"><a href="#cb2-7"></a>b_q_2 <span class="ot">&lt;-</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>  <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca2-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
-<span id="cb2-9"><a href="#cb2-9"></a>b_q_3 <span class="ot">&lt;-</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a>  <span class="fu">read_csv</span>(<span class="st">"QuebradaCuenca3-Bisley.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span>
-<span id="cb2-11"><a href="#cb2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#Full Join</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>stream_water_df <span class="ot">&lt;-</span> p_r_m <span class="sc">%&gt;%</span> </span>
-<span id="cb2-14"><a href="#cb2-14"></a>  <span class="fu">full_join</span>(b_q_1) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-15"><a href="#cb2-15"></a>  <span class="fu">full_join</span>(b_q_2) <span class="sc">%&gt;%</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a>  <span class="fu">full_join</span>(b_q_3)</span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="co"># Export Merged Data</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="fu">setwd</span>(<span class="st">"/courses/EDS214/pr/data/processed_data"</span>)</span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="fu">write_csv</span>(stream_water_df, <span class="st">"stream_water.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Tidy Data</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data for four sites</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>prm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"RioMameyesPuenteRoto.csv"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"NA"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_date_ymd =</span> lubridate<span class="sc">::</span><span class="fu">ymd</span>(sample_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">year</span>(sample_date_ymd),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">month =</span> <span class="fu">month</span>(sample_date_ymd),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">day =</span> <span class="fu">day</span>(sample_date_ymd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Export Merged Data</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># merge data via full join </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stream_water_df <span class="ot">&lt;-</span> prm <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">full_join</span>(bq_1) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(bq_2) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(bq_3)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># export the data frame</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"/courses/EDS214/pr/data/processed_data"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(stream_water_df,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>          <span class="st">"stream_water.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+
 </div>
 </section>
 
@@ -459,46 +472,47 @@
 <h1>Results</h1>
 
 </section>
-<section id="tidy-data---recreate-graph" class="slide level2">
-<h2>Tidy data - Recreate Graph</h2>
+<section id="recreate-graph" class="slide level2">
+<h2>Recreate Graph</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># place holder for code - tidy data and graph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
+<section id="recreate-graph-1" class="slide level2">
+<h2>Recreate Graph</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section></section>
+<section id="new-question" class="title-slide slide level1 center" data-auto-stretch="" data-center="">
+<h1>New Question</h1>
+<p>We were interested in looking at the relationshiop betweeen suspened sediment and pH over time at the same three sites.</p>
+<div class="cell">
+
 </div>
 </section>
-<section id="graph" class="slide level2">
-<h2>Graph</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#place code again, hide code and only show output</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="new-question" class="slide level2">
-<h2>New Question</h2>
-<p>We were interested in looking at the relationship between suspended sediment and temperature over time at the same three sites.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># place holder for code - tidy data </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># place holder to show any graphs or figures</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section></section>
+
+<section id="new-question-1" class="title-slide slide level1 center">
+<h1>New Question</h1>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+
 <section>
 <section id="challenges" class="title-slide slide level1 center">
 <h1>Challenges</h1>
 <ol type="1">
 <li>Determining if we should use absolute paths</li>
 <li>tidy data?</li>
-<li>extra</li>
+<li>Over time how total sediment and carbon vary and is there a correlation between the two. Also attempted temperature.</li>
 </ol>
 </section>
-<section id="resources" class="slide level2 small">
+<section id="resources" class="slide level2">
 <h2>Resources</h2>
-<p>Our github repository:<br>
-https://github.com/avidalmeza/pr</p>
-<p>Our data:</p>
+<p>Our github repository: <a href="https://github.com/avidalmeza/pr" class="uri">https://github.com/avidalmeza/pr</a></p>
+<p>Our data: The data used in this project is located on EDI and can be accessed here: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-luq.20.4923058" class="uri">https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-luq.20.4923058</a></p>
 </section>
 <section id="references" class="slide level2">
 <h2>References</h2>
-<p>McDowell, W. 2022. Chemistry of stream water from the Luquillo Mountains ver 4923058. Environmental Data Initiative. doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83</p>
+<p>McDowell, W. 2022. Chemistry of stream water from the Luquillo Mountains ver 4923058. Environmental Data Initiative. <a href="https://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83" class="uri">https://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83</a></p>
 <p>Schaefer, D., McDowell, W., Scatena, F., &amp; Asbury, C. (2000). Effects of hurricane disturbance on stream water concentrations and fluxes in eight tropical forest watersheds of the Luquillo Experimental Forest, Puerto Rico. Journal of Tropical Ecology, 16(2), 189-207. <a href="doi:10.1017/S0266467400001358" class="uri">doi:10.1017/S0266467400001358</a></p>
 <div class="footer footer-default">
 
@@ -529,7 +543,7 @@ https://github.com/avidalmeza/pr</p>
       // https://revealjs.com/config/
       Reveal.initialize({
 'controlsAuto': true,
-'previewLinksAuto': false,
+'previewLinksAuto': true,
 'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
