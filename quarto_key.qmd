@@ -17,6 +17,7 @@ library(ggExtra)
 library(lubridate)
 library(patchwork)
 library(RCurl)
+library(ggpubr)
 ```
 
 # Division of tasks
@@ -203,13 +204,9 @@ summary(sediment_ph_1988_lm, robust = T)
 sediment_ph_1989_lm <- lm (p_h ~ tss + sample_id, stream_water_df_1989)
 summary(sediment_ph_1989_lm, robust = T)
 
-# First difference
-f_diff_1989_88 <- lm(I(stream_water_df_1989$p_h - stream_water_df_1988$p_h)~I(stream_water_df_1989$tss - stream_water_df_1988$tss))
-summary(f_diff_1989_88)
-
-f_diff_1990_88 <- lm(I(stream_water_df_1990$p_h - stream_water_df_1988$p_h)~I(stream_water_df_1990$tss - stream_water_df_1988$tss))
-summary(f_diff_1990_88)
-
+# Linear regression for 1990
+sediment_ph_1990_lm <- lm (p_h ~ tss + sample_id, stream_water_df_1990)
+summary(sediment_ph_1990_lm, robust = T)
 ```
 
 ```{r}
@@ -224,7 +221,8 @@ ggplot(stream_water_df_1988,
   labs(title = "Linear regression of PH and total suspended sediment \nfrom the Luquillo Mountains in 1988",
        caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "PH",
-       y = "Total Suspended Sediment (mg/L)")
+       y = "Total Suspended Sediment (mg/L)") +
+    stat_cor(method = "pearson")
 ```
 
 ```{r}
@@ -239,5 +237,6 @@ ggplot(stream_water_df_1990,
   labs(title = "Linear regression of PH and total suspended sediment \nfrom the Luquillo Mountains in 1990",
        caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "PH",
-       y = "Total Suspended Sediment (mg/L)")
+       y = "Total Suspended Sediment (mg/L)") +
+  stat_cor(method = "pearson")
 ```
