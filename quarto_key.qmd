@@ -18,23 +18,27 @@ library(lubridate)
 library(patchwork)
 ```
 
-# Documentation
+# Division of tasks
 
-Group:
+-   Created shared folder on Taylor-Adelaide
 
-1\) Created shared folder on Taylor-Adelaide
+-   Created github repository and shared with collaborators-Alessandra
 
-2\) Created github repository and shared with collaborators-Ale
+-   Created Quarto document with sections to work in separately- Group Effort
 
-3)Created Quarto graph with sections to work in separately
+-   Import and tidy data- Group Effort
 
-Andre - work on graph
+-   Graph Recreation-Andre/Guillermo
+
+-   New Question- Alessandra/Adelaide
+
+-   Slides- Guillermo
 
 # Import, tidy, and join data
 
 ```{r}
 
-# read all quebradas
+# read in data for four sites
 setwd("/courses/EDS214/pr/data/knb_lter_luq_raw")
 
 prm <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
@@ -78,8 +82,7 @@ setwd("/courses/EDS214/pr/data/processed_data")
 write_csv(stream_water_df, "stream_water.csv")
 ```
 
-# Recreate Graph (Step 1)
-
+# Recreate Graph
 
 ```{r}
 stream_quality <- stream_water_df %>%
@@ -97,6 +100,7 @@ monthly_stream_quality <- stream_quality %>%
   mutate(sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley")) %>%
   mutate(sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"))
 ```
+
 ```{r}
 ggplot(monthly_stream_quality, aes(x = date,
                                y = monthlyk) )+
@@ -114,8 +118,6 @@ ggplot(monthly_stream_quality, aes(x = date,
  
 ```
 
-## WORK UNDER HERE ALSO
-
 ```{r}
 ggplot(monthly_stream_quality, aes(x = date,
                                y = monthlyno3) )+
@@ -131,11 +133,11 @@ ggplot(monthly_stream_quality, aes(x = date,
         plot.title.position = "plot")
 ```
 
-<<<<<<< HEAD
-Over time how to total sediment and carbon vary and is there a correlation between the two.
+# 
 
+# New Question
 
-https://link.springer.com/article/10.1007/s40996-020-00460-3
+Looking at the relationship between total suspended sediment and pH for the same three sites from 1989 to 2017.
 
 ```{r}
 sediment_ph_df <- stream_water_df %>%
