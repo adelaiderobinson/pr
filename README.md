@@ -8,8 +8,6 @@ Source: Luquillo LTER
 
 Quebrada Sonadora
 
-Meteorological station on East Peak road in the Elfin Forest of the Luquillo Mountains, Puerto Rico.
-
 ## Overall Goal
 
 The goal of this project was to work as a team using an analytical workflow. In order to do this we utilized data collected on stream water chemistry within the Luquillo Experimental Forest, this data was collected as part of the the long Term Ecological Research (LTER) Network.
