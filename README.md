@@ -16,7 +16,7 @@ The goal of this project was to work as a team using an analytical workflow. In 
 
 ### Recreate a graph
 
-The first object of the project was to recreate a graph containing data on potassium and nitrogen between 1988 and 1994 for three sites within the Loquillo Experimental Forest. These sites were Puento Roto Mamayes, Quebrada 1-Bisley, Quebrada 2- Bisley and Quebrada 3- Bisley.
+The first object of the project was to recreate a graph containing data on potassium and nitrogen between 1988 and 1994 for three sites within the Loquillo Experimental Forest. These sites were Puente Roto Mamayes, Quebrada 1-Bisley, Quebrada 2- Bisley and Quebrada 3- Bisley.
 
 ### Devising our own question
 
