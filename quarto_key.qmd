@@ -150,36 +150,36 @@ sediment_ph_df <- stream_water_df %>%
             potassium_code, magnesium_code, calcium_code,
             nh4code, po4code, doc_code,
             dic_code, tdn_code, si_o2code,
-            don_code)) %>%
-  mutate(tss = as.numeric(tss)) %>%
-  mutate(yearc = as.character(year))
+            don_code)) %>% # selecting relevant columns
+  mutate(tss = as.numeric(tss)) %>% # changing tss to numeric
+  mutate(yearc = as.character(year)) #changing to character for linear regression fixed effects 
 
 sediment_ph_long <- sediment_ph_df %>%
-  pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>%
+  pivot_longer(cols = c(p_h, tss), names_to = "parameter") %>% #combining p_h and tss into one column
   group_by(year, parameter, sample_id) %>% 
-  summarize(mean_parameter = mean(value, na.rm = TRUE)) %>%
+  summarize(mean_parameter = mean(value, na.rm = TRUE)) %>% # find mean of tss and ph by year
   mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes"),
          sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley"),
          sample_id = str_replace(sample_id, "Q2", "Quebrada 2 - Bisley"),
          sample_id = str_replace(sample_id, "Q3", "Quebrada 3 - Bisley"),
          parameter = str_replace(parameter, "p_h", "PH"),
-         parameter = str_replace(parameter, "tss", "Total Suspended Sediment (mg/L)"))
+         parameter = str_replace(parameter, "tss", "Total Suspended Sediment (mg/L)")) # relabeling sites and parameters
 ```
 
 ```{r}
 ggplot(sediment_ph_long,
        aes(x = year,
            y = mean_parameter)) +
-  geom_line(aes(color = sample_id)) +
+  geom_line(aes(color = sample_id)) + #split each site into a line
   facet_wrap(~parameter,
              scales = "free",
-             ncol = 1) +
+             ncol = 1) + #split graphs by paramater
   theme(legend.title = element_blank(),
         legend.position = "bottom") +
   geom_vline(xintercept = 1989, 
              linetype = "dashed") + 
   geom_vline(xintercept = 2017, 
-             linetype = "dashed") + 
+             linetype = "dashed") +  #adding vertical lines to indicate hurricanes
   labs(title = "PH and total suspended sediment in stream water \nfrom the Luquillo Mountains",
        caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
        x = "Year",
