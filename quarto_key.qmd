@@ -24,8 +24,7 @@ library(patchwork)
 
 -   Created github repository and shared with collaborators-Alessandra
 
--   Created Quarto document with sections to work in separately- Group
-    Effort
+-   Created Quarto document with sections to work in separately- Group Effort
 
 -   Import and tidy data- Group Effort
 
@@ -39,13 +38,13 @@ library(patchwork)
 
 ```{r}
 
-# read in data for four sites
+# Update current directory (cd):
 setwd("/courses/EDS214/pr/data/knb_lter_luq_raw")
 
-prm <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%
-  clean_names() %>%
-  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>%
-  mutate(year = year(sample_date_ymd),
+prm <- read_csv("RioMameyesPuenteRoto.csv", na = c("NA")) %>%   
+  clean_names() %>% #tidy the data to snake_case
+  mutate(sample_date_ymd = lubridate::ymd(sample_date)) %>% # Adjust to ymd format
+  mutate(year = year(sample_date_ymd), 
          month = month(sample_date_ymd),
          day = day(sample_date_ymd))
 
@@ -87,14 +86,14 @@ write_csv(stream_water_df, "stream_water.csv")
 
 ```{r}
 stream_quality <- stream_water_df %>%
-   select(sample_id, sample_date_ymd, no3_n, k) %>%
+   select(sample_id, sample_date_ymd, no3_n, k) %>% #K and No3N data by watershed (sample_id)
   mutate(year = year(sample_date_ymd),
          date = ymd(paste0(year, "-", month(sample_date_ymd), "-1"))) %>%
-  filter(year %in% 1988:1994)
+  filter(year %in% 1988:1994) #Year data range
 
 monthly_stream_quality <- stream_quality %>%
-  group_by(sample_id, date) %>%
-  summarize(monthlyno3 = mean(no3_n, na.rm = TRUE),
+  group_by(sample_id, date) %>% #grouped data by date and watershed
+  summarize(monthlyno3 = mean(no3_n, na.rm = TRUE), #Get the monthly mean
             monthlyk = mean(k, na.rm = TRUE)) %>%
   mutate(sample_id = str_replace(sample_id, "MPR", "Puente Roto Mameyes")) %>%
   mutate(sample_id = str_replace(sample_id, "Q1", "Quebrada 1 - Bisley")) %>%
@@ -109,12 +108,12 @@ ggplot(monthly_stream_quality, aes(x = date,
   labs(title = "Potassium Levels by Watershed",
        x = "Year",
        y = "Potassium Levels (mg/L)") +
-  facet_wrap(~sample_id) +
-  theme_test() +
-  theme(legend.position = "none",
+  facet_wrap(~sample_id) + #facet by different watersheds
+  theme_test() + 
+  theme(legend.position = "none", #facet, legend not necessary
         panel.grid.major = element_line(colour = "gray",
                                         size = 0.10),
-        plot.title.position = "plot") 
+        plot.title.position = "plot") #Shift title to the left
   
  
 ```
@@ -138,8 +137,7 @@ ggplot(monthly_stream_quality, aes(x = date,
 
 # New Question
 
-Looking at the relationship between total suspended sediment and pH for
-the same three sites from 1989 to 2017.
+Looking at the relationship between total suspended sediment and pH for the same three sites from 1989 to 2017.
 
 ```{r}
 sediment_ph_df <- stream_water_df %>%
