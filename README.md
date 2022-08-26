@@ -8,7 +8,7 @@ Credit: Luquilo LTER. CC BY-SA 4.0
 
 Meteorological station on East Peak road in the Elfin Forest of the Luquillo Mountains, Puerto Rico.
 
-## Overall Goals
+## Overall Goal
 
 The goal of this project was to work as a team using an analytical workflow. In order to do this we utilized data collected on stream water chemistry within the Luquillo Experimental Forest, this data was collected as part of the the long Term Ecological Research (LTER) Network.
 
@@ -16,11 +16,11 @@ The goal of this project was to work as a team using an analytical workflow. In 
 
 ### Recreate a graph
 
-The first object of the project was to recreate a graph containing data on potassium and nitrogen between 1988 and 1994 for three sites within the Loquillo Experimental Forest.
+The first object of the project was to recreate a graph containing data on potassium and nitrogen between 1988 and 1994 for three sites within the Loquillo Experimental Forest. These sites were Puento Roto Mamayes, Quebrada 1-Bisley, Quebrada 2- Bisley and Quebrada 3- Bisley.
 
 ### Devising our own question
 
-The second goal of the project was to devise our own question around the data. We were interested in looking at the relationship between suspended sediment and temperature at the same three sites over a longer time frame.
+The second goal of the project was to devise our own question around the data. We were interested in looking at the relationship between suspended sediment and pH at the same three sites from 1986 to 2018.
 
 ## Running the Code
 
