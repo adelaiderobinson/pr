@@ -188,12 +188,6 @@ ggplot(sediment_ph_long,
 ```
 
 ```{r}
-# Linear regression with time and entity fixed effects
-sediment_ph_lm <- lm (p_h ~ tss + yearc + sample_id, sediment_ph_df)
-summary(sediment_ph_lm, robust = T)
-```
-
-```{r}
 # create subsets of summary_ph_df data
 stream_water_df_1988 <- subset(sediment_ph_df, year == 1988)
 stream_water_df_1989 <- subset(sediment_ph_df, year == 1989)
@@ -211,11 +205,39 @@ summary(sediment_ph_1989_lm, robust = T)
 
 # First difference
 f_diff_1989_88 <- lm(I(stream_water_df_1989$p_h - stream_water_df_1988$p_h)~I(stream_water_df_1989$tss - stream_water_df_1988$tss))
-
 summary(f_diff_1989_88)
 
 f_diff_1990_88 <- lm(I(stream_water_df_1990$p_h - stream_water_df_1988$p_h)~I(stream_water_df_1990$tss - stream_water_df_1988$tss))
-
 summary(f_diff_1990_88)
 
+```
+
+```{r}
+ggplot(stream_water_df_1988,
+       aes(x = p_h,
+           y = tss)) + 
+  geom_point(color = "#32965D",
+             alpha = 1/4,
+             shape = 19) +
+  stat_smooth(method = "lm", col = "#68A357") +
+  theme_light() +
+  labs(title = "Linear regression of PH and total suspended sediment \nfrom the Luquillo Mountains in 1988",
+       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
+       x = "PH",
+       y = "Total Suspended Sediment (mg/L)")
+```
+
+```{r}
+ggplot(stream_water_df_1990,
+       aes(x = p_h,
+           y = tss)) + 
+  geom_point(color = "#32965D",
+             alpha = 1/4,
+             shape = 19) +
+  stat_smooth(method = "lm", col = "#68A357") +
+  theme_light() +
+  labs(title = "Linear regression of PH and total suspended sediment \nfrom the Luquillo Mountains in 1990",
+       caption = "McDowell, W. 2022. Chemistry of stream water \nfrom the Luquillo Mountains ver 4923058. Environmental Data Initiative.\nhttps://doi.org/10.6073/pasta/1dd1a59a7e6fbe95fdf8736477d81b83",
+       x = "PH",
+       y = "Total Suspended Sediment (mg/L)")
 ```
